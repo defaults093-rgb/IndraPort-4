@@ -1,0 +1,7 @@
+{
+  "name": "Indra Visuals Portfolio",
+  "description": "A premium, high-performance portfolio for Indra Visuals, showcasing excellence in 2D animation, illustration, logo design, and video editing with cutting-edge animations and interactive UI.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

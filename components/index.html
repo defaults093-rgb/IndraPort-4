@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>INDRA VISUALS | Creative Design & Animation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #050505;
+        color: #ffffff;
+        font-family: 'Space+Grotesk', sans-serif;
+        overflow-x: hidden;
+        cursor: none; /* Hide default cursor for custom one */
+      }
+      .syncopate { font-family: 'Syncopate', sans-serif; }
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: #0a0a0a; }
+      ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+      ::-webkit-scrollbar-thumb:hover { background: #555; }
+      
+      .glass {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      
+      .gradient-text {
+        background: linear-gradient(to right, #6366f1, #a855f7, #ec4899);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      
+      @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+        100% { transform: translateY(0px); }
+      }
+      .animate-float { animation: float 6s ease-in-out infinite; }
+
+      /* Reveal Animation Utility */
+      .reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 0.8s cubic-bezier(0.17, 0.55, 0.55, 1);
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Custom Cursor Styles */
+      #custom-cursor {
+        position: fixed;
+        width: 12px;
+        height: 12px;
+        background: white;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        mix-blend-mode: difference;
+        transition: transform 0.2s ease-out, opacity 0.3s ease;
+      }
+      #custom-cursor-follower {
+        position: fixed;
+        width: 40px;
+        height: 40px;
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9998;
+        transition: transform 0.1s ease-out;
+      }
+      
+      .cursor-hover #custom-cursor { transform: scale(4); }
+      .cursor-hover #custom-cursor-follower { transform: scale(0); }
+
+      /* Hide custom cursor on mobile */
+      @media (max-width: 1024px) {
+        body { cursor: auto; }
+        #custom-cursor, #custom-cursor-follower { display: none; }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="custom-cursor"></div>
+    <div id="custom-cursor-follower"></div>
+    <div id="root"></div>
+    <script>
+      // Global Cursor Movement
+      const cursor = document.getElementById('custom-cursor');
+      const follower = document.getElementById('custom-cursor-follower');
+      
+      document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        
+        // Follower with slight lag
+        setTimeout(() => {
+          follower.style.left = (e.clientX - 14) + 'px';
+          follower.style.top = (e.clientY - 14) + 'px';
+        }, 50);
+      });
+
+      // Hover Detection
+      document.addEventListener('mouseover', (e) => {
+        if (e.target.closest('button, a, input, select, textarea, .cursor-pointer')) {
+          document.body.classList.add('cursor-hover');
+        }
+      });
+      document.addEventListener('mouseout', (e) => {
+        if (e.target.closest('button, a, input, select, textarea, .cursor-pointer')) {
+          document.body.classList.remove('cursor-hover');
+        }
+      });
+    </script>
+  </body>
+</html>
