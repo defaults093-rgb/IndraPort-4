@@ -29,8 +29,7 @@ const App: React.FC = () => {
       setProjects([...stored]);
       return stored;
     } catch (err) {
-      console.error("Critical State Desync:", err);
-      setErrorState("Failed to synchronize project database.");
+      console.error("Database Retrieval Failed:", err);
       return [];
     }
   }, []);
@@ -39,33 +38,32 @@ const App: React.FC = () => {
     let mounted = true;
 
     const startup = async () => {
-      // Emergency timeout to prevent infinite loading
-      const timeout = setTimeout(() => {
-        if (isLoading && mounted) {
-          setErrorState("Database connection timed out. Storage may be restricted.");
-          setIsLoading(false);
-        }
-      }, 8000);
-
       try {
+        // 1. Initialize DB
         await initDB(); 
+        
+        // 2. Initial Fetch
         const storedProjects = await refreshProjects();
         
         if (!mounted) return;
 
-        const hasInitialized = localStorage.getItem('indra_initialized_v2');
-        if (storedProjects.length === 0 && !hasInitialized) {
+        // 3. Force Seed if database is empty (Resilient to Netlify/Vercel state resets)
+        if (storedProjects.length === 0) {
+          console.log("Archive Empty. Seeding initial artifacts...");
+          // We save them one by one to ensure transactions complete
           for (const p of INITIAL_PROJECTS) {
-            await saveProject(p);
+            try {
+              await saveProject(p);
+            } catch (e) {
+              console.warn(`Seed failed for project ${p.id}:`, e);
+            }
           }
-          localStorage.setItem('indra_initialized_v2', 'true');
           await refreshProjects();
         }
       } catch (err) {
-        console.error("Hardware Failure Simulation:", err);
-        if (mounted) setErrorState("Critical Engine Error: IndexedDB access denied.");
+        console.error("Hardware Failure:", err);
+        if (mounted) setErrorState("Critical Engine Error: Database access was denied. Ensure you are not in a highly restrictive Private/Incognito window.");
       } finally {
-        clearTimeout(timeout);
         if (mounted) setIsLoading(false);
       }
     };
@@ -126,19 +124,18 @@ const App: React.FC = () => {
       await saveProject(p);
       await refreshProjects();
     } catch (err) {
-      alert("Storage Quota Exceeded: The device is at capacity. Remove items to continue.");
+      console.error("Save Error:", err);
+      alert("System Overload: Storage limit reached or write access denied by browser.");
     }
   };
 
   const handleDeleteProject = async (id: string) => {
     try {
       await deleteProjectFromDB(id);
-      setProjects(prev => prev.filter(p => p.id !== id));
-      // Re-sync after delay to ensure transaction commitment
-      setTimeout(refreshProjects, 100);
+      await refreshProjects();
     } catch (err) {
       console.error("Purge Error:", err);
-      alert("System integrity error: Artifact could not be purged.");
+      alert("Protocol Error: Memory sector could not be cleared.");
     }
   };
 
@@ -160,13 +157,13 @@ const App: React.FC = () => {
         <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mb-8 border border-red-500/20">
           <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
         </div>
-        <h2 className="syncopate text-xl font-bold text-white mb-4 uppercase">System Crash Recovery</h2>
+        <h2 className="syncopate text-xl font-bold text-white mb-4 uppercase">System Link Failure</h2>
         <p className="text-zinc-500 text-sm max-w-md mb-8 leading-relaxed font-light">{errorState}</p>
         <button 
           onClick={() => window.location.reload()}
           className="px-8 py-4 bg-indigo-600 text-white rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-indigo-700 transition-all cursor-pointer"
         >
-          Re-initialize Hardware
+          Retry Calibration
         </button>
       </div>
     );
