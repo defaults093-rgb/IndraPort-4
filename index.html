@@ -17,7 +17,7 @@
         color: #ffffff;
         font-family: 'Space Grotesk', sans-serif;
         overflow-x: hidden;
-        cursor: none; /* Hide default cursor for custom one */
+        cursor: none;
       }
       .syncopate { font-family: 'Syncopate', sans-serif; }
       ::-webkit-scrollbar { width: 6px; }
@@ -37,14 +37,6 @@
         -webkit-text-fill-color: transparent;
       }
       
-      @keyframes float {
-        0% { transform: translateY(0px); }
-        50% { transform: translateY(-20px); }
-        100% { transform: translateY(0px); }
-      }
-      .animate-float { animation: float 6s ease-in-out infinite; }
-
-      /* Enhanced Reveal Animation Utility */
       .reveal {
         opacity: 0;
         transform: translateY(30px) scale(0.98);
@@ -60,7 +52,6 @@
         pointer-events: auto;
       }
 
-      /* Custom Cursor Styles */
       #custom-cursor {
         position: fixed;
         width: 10px;
@@ -86,7 +77,6 @@
       .cursor-hover #custom-cursor { transform: scale(5); }
       .cursor-hover #custom-cursor-follower { transform: scale(0); }
 
-      /* Hide custom cursor on mobile */
       @media (max-width: 1024px) {
         body { cursor: auto; }
         #custom-cursor, #custom-cursor-follower { display: none; }
@@ -95,9 +85,10 @@
     <script type="importmap">
     {
       "imports": {
+        "react-dom": "https://esm.sh/react-dom@^19.2.4",
         "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-        "react/": "https://esm.sh/react@^19.2.4/",
         "react": "https://esm.sh/react@^19.2.4",
+        "react/": "https://esm.sh/react@^19.2.4/",
         "@google/genai": "https://esm.sh/@google/genai@^1.38.0"
       }
     }
@@ -106,27 +97,21 @@
   <body>
     <div id="custom-cursor"></div>
     <div id="custom-cursor-follower"></div>
-    
     <div id="root"></div>
-
     <script type="module" src="index.tsx"></script>
-
     <script>
       const cursor = document.getElementById('custom-cursor');
       const follower = document.getElementById('custom-cursor-follower');
-      
       document.addEventListener('mousemove', (e) => {
         if (cursor && follower) {
           cursor.style.left = e.clientX + 'px';
           cursor.style.top = e.clientY + 'px';
-          
           setTimeout(() => {
             follower.style.left = (e.clientX - 18) + 'px';
             follower.style.top = (e.clientY - 18) + 'px';
           }, 40);
         }
       });
-
       document.addEventListener('mouseover', (e) => {
         if (e.target.closest('button, a, input, select, textarea, .cursor-pointer')) {
           document.body.classList.add('cursor-hover');

@@ -3,46 +3,46 @@ import { Project, Service } from '../types';
 
 export const PROJECTS: Project[] = [
   {
-    id: '1',
-    title: 'Neon Drift Odyssey',
-    category: 'Animation',
-    imageUrl: 'https://picsum.photos/seed/drift/800/1000',
-    description: 'A stylistic 2D animation short featuring cyber-noir aesthetics.'
-  },
-  {
-    id: '2',
-    title: 'Minimalist Tech Identity',
+    id: 'store-logo-v1',
+    title: 'STORE LOGO',
     category: 'Logo Design',
-    imageUrl: 'https://picsum.photos/seed/logo1/800/1000',
-    description: 'Visual identity for a silicon valley startup focusing on AI.'
+    imageUrl: 'https://images.unsplash.com/photo-1770135939978-12ec7363a3de?q=80&w=2000&auto=format&fit=crop',
+    description: 'This is a logo design created for a store. It represents the store’s identity and is designed to look professional, simple, and memorable.'
   },
   {
-    id: '3',
-    title: 'Enchanted Forest Narrative',
+    id: 'store-logo-v2',
+    title: 'STORE LOGO',
+    category: 'Logo Design',
+    imageUrl: 'https://images.unsplash.com/photo-1770137013310-0f100329e186?q=80&w=2000&auto=format&fit=crop',
+    description: 'A detailed presentation of the store identity, showcasing the professional and clean aesthetic of the brand across secondary applications.'
+  },
+  {
+    id: 'store-logo-v3',
+    title: 'STORE LOGO',
+    category: 'Logo Design',
+    imageUrl: 'https://images.unsplash.com/photo-1770137013294-4d2869814f6e?q=80&w=2000&auto=format&fit=crop',
+    description: 'A clean and modern store logo identity emphasizing minimalist aesthetics and professional brand presence.'
+  },
+  {
+    id: 'fenix-illustration',
+    title: 'FENIX ILLUSTRATION 🦊',
     category: 'Illustration',
-    imageUrl: 'https://picsum.photos/seed/forest/800/1000',
-    description: 'Digital painting for a fantasy graphic novel.'
+    imageUrl: 'https://images.unsplash.com/photo-1770137098751-f8a66174c1a4?w=2000&auto=format&fit=crop',
+    description: 'A premium digital illustration piece that combines intricate detail with cinematic lighting and composition.'
   },
   {
-    id: '4',
-    title: 'Action Sports Highlight',
+    id: 'cat-illustration',
+    title: 'CAT ILLUSTRATION 😻',
+    category: 'Illustration',
+    imageUrl: 'https://images.unsplash.com/photo-1770137013352-aa5db6f6bcbd?w=2000&auto=format&fit=crop',
+    description: 'A vibrant and expressive digital illustration featuring a stylized cat character with cinematic lighting.'
+  },
+  {
+    id: 'thumbnail-editing',
+    title: 'THUMBNAIL',
     category: 'Editing',
-    imageUrl: 'https://picsum.photos/seed/edit/800/1000',
-    description: 'High-energy rhythmic editing for a professional skate brand.'
-  },
-  {
-    id: '5',
-    title: 'Abstract Character Design',
-    category: 'Illustration',
-    imageUrl: 'https://picsum.photos/seed/char/800/1000',
-    description: 'A series of vibrant character studies for an indie game.'
-  },
-  {
-    id: '6',
-    title: 'Flow Motion Typography',
-    category: 'Animation',
-    imageUrl: 'https://picsum.photos/seed/typo/800/1000',
-    description: 'Experimental kinetic typography animation.'
+    imageUrl: 'https://images.unsplash.com/photo-1770137098448-5b16ef7f2346?w=2000&auto=format&fit=crop',
+    description: 'Professional high-retention thumbnail design with advanced color grading and attention-grabbing visual elements.'
   }
 ];
 

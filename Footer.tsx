@@ -29,13 +29,25 @@ const Footer: React.FC = () => {
       )
     },
     { 
-      name: 'Email', 
-      url: 'mailto:defaults093@gmail.com',
-      brandColor: 'hover:border-indigo-500 hover:shadow-[0_0_20px_rgba(99,102,241,0.4)]',
-      glowColor: 'bg-indigo-500',
+      name: 'Twitter', 
+      url: '#',
+      brandColor: 'hover:border-[#1DA1F2] hover:shadow-[0_0_20px_rgba(29,161,242,0.4)]',
+      glowColor: 'bg-[#1DA1F2]',
       icon: (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
+          <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" strokeWidth="2"></path>
+        </svg>
+      )
+    },
+    { 
+      name: 'LinkedIn', 
+      url: '#',
+      brandColor: 'hover:border-[#0077B5] hover:shadow-[0_0_20px_rgba(0,119,181,0.4)]',
+      glowColor: 'bg-[#0077B5]',
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" strokeWidth="2"></path>
+          <circle cx="4" cy="4" r="2" strokeWidth="2"></circle>
         </svg>
       )
     }
@@ -56,12 +68,13 @@ const Footer: React.FC = () => {
               A creative laboratory pushing the boundaries of visual communication through animation and design excellence.
             </p>
             
+            {/* ULTRA HIGHLIGHTED SOCIAL BUTTONS */}
             <div className="flex flex-wrap gap-5">
               {socials.map((social) => (
                 <a 
                   key={social.name} 
                   href={social.url} 
-                  target={social.name === 'Email' ? '_self' : '_blank'} 
+                  target="_blank" 
                   rel="noopener noreferrer"
                   className={`group relative w-14 h-14 flex items-center justify-center rounded-2xl glass border border-white/10 transition-all duration-500 ${social.brandColor} hover:-translate-y-2`}
                   title={social.name}
@@ -70,6 +83,7 @@ const Footer: React.FC = () => {
                     {social.icon}
                   </div>
                   
+                  {/* Hover Bloom Effect */}
                   <div className={`absolute inset-0 rounded-2xl ${social.glowColor} blur-2xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 pointer-events-none`}></div>
                   <div className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-10 transition-all duration-500 ${social.glowColor}`}></div>
                 </a>

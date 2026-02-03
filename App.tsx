@@ -34,6 +34,20 @@ const App: React.FC = () => {
     }
   }, []);
 
+  const seedDatabase = async (pList: Project[]) => {
+    try {
+      const existing = await getAllProjects();
+      for (const item of existing) {
+        await deleteProjectFromDB(item.id);
+      }
+      for (const p of pList) {
+        await saveProject(p);
+      }
+    } catch (e) {
+      console.error("Initial Artifact Seed Fault:", e);
+    }
+  };
+
   useEffect(() => {
     let mounted = true;
 
@@ -41,21 +55,22 @@ const App: React.FC = () => {
       try {
         await initDB(); 
         const storedProjects = await refreshProjects();
+
         if (!mounted) return;
 
-        if (storedProjects.length === 0) {
-          for (const p of INITIAL_PROJECTS) {
-            try {
-              await saveProject(p);
-            } catch (e) {
-              console.warn(`Seed failed for project ${p.id}:`, e);
-            }
-          }
+        // Check if we need to sync with the updated INITIAL_PROJECTS list
+        // Looking for the newest Cat Illustration ID to trigger a re-sync
+        const hasNewContent = storedProjects.some(p => p.id === 'cat-illustration');
+        const needsSync = storedProjects.length === 0 || !hasNewContent;
+
+        if (needsSync) {
+          console.log(`[Visual Engine] Syncing updated archives: Cat Illustration & Store Logo V3...`);
+          await seedDatabase(INITIAL_PROJECTS);
           await refreshProjects();
         }
       } catch (err) {
         console.error("Hardware Failure:", err);
-        if (mounted) setErrorState("Critical Engine Error: Database access was denied.");
+        if (mounted) setErrorState("Critical Engine Error: Persistent storage link is unavailable.");
       } finally {
         if (mounted) setIsLoading(false);
       }
@@ -69,30 +84,18 @@ const App: React.FC = () => {
     return () => { mounted = false; };
   }, [refreshProjects]);
 
-  // Enhanced Reveal Animation Intersection Observer with Stagger
   useEffect(() => {
-    if (isLoading || errorState) return;
+    if (isLoading || errorState || view !== 'public') return;
 
     const observer = new IntersectionObserver((entries) => {
-      // Sort entries that are intersecting by their vertical distance from the top
-      // to ensure they reveal in a sequential order
-      const intersectingEntries = entries
-        .filter(entry => entry.isIntersecting && !entry.target.classList.contains('active'))
-        .sort((a, b) => {
-          const aRect = a.target.getBoundingClientRect();
-          const bRect = b.target.getBoundingClientRect();
-          return aRect.top - bRect.top;
-        });
-
-      intersectingEntries.forEach((entry, index) => {
-        // Apply a temporal stagger for elements entering at the same time
-        setTimeout(() => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
           entry.target.classList.add('active');
-        }, index * 100);
+        }
       });
     }, { 
       threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px' // Start reveal slightly before it hits the view
+      rootMargin: '0px 0px -50px 0px'
     });
 
     const revealElements = document.querySelectorAll('.reveal');
@@ -101,7 +104,6 @@ const App: React.FC = () => {
     return () => observer.disconnect();
   }, [view, isLoading, projects, errorState]);
 
-  // Scroll Tracking
   useEffect(() => {
     const handleScroll = () => {
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -135,7 +137,7 @@ const App: React.FC = () => {
       await saveProject(p);
       await refreshProjects();
     } catch (err) {
-      console.error("Save Error:", err);
+      console.error("Local Archive Write Failed:", err);
     }
   };
 
@@ -144,7 +146,7 @@ const App: React.FC = () => {
       await deleteProjectFromDB(id);
       await refreshProjects();
     } catch (err) {
-      console.error("Purge Error:", err);
+      console.error("Archive Purge Fault:", err);
     }
   };
 
@@ -172,11 +174,12 @@ const App: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center gap-6">
+      <div className="min-h-screen bg-[#020202] flex flex-col items-center justify-center gap-6">
         <div className="relative">
-          <div className="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full flex items-center justify-center font-bold text-white text-2xl animate-pulse shadow-[0_0_30px_#6366f1]">I</div>
+          <div className="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full flex items-center justify-center font-bold text-white text-2xl animate-pulse shadow-[0_0_40px_rgba(99,102,241,0.3)]">I</div>
           <div className="absolute inset-0 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin"></div>
         </div>
+        <span className="syncopate text-[8px] font-black uppercase tracking-[0.6em] text-zinc-700 animate-pulse">Establishing Neural Link</span>
       </div>
     );
   }
@@ -198,7 +201,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#050505]">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#020202]">
       <div className="fixed top-0 left-0 w-full h-1 z-[110] bg-zinc-900/50">
         <div 
           className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500 transition-all duration-300 shadow-[0_0_20px_rgba(99,102,241,0.6)]" 
@@ -222,7 +225,8 @@ const App: React.FC = () => {
 
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className={`fixed bottom-6 right-6 md:bottom-8 md:right-8 w-12 h-12 glass rounded-full flex items-center justify-center transition-all duration-500 hover:bg-indigo-600/20 group z-50 ${showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}
+        className={`fixed bottom-6 right-6 md:bottom-8 md:right-8 w-12 h-12 glass rounded-full flex items-center justify-center transition-all duration-500 hover:bg-indigo-600/20 group z-50 ${showScrollTop ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-90 pointer-events-none'}`}
+        aria-label="Back to Top"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-400 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
