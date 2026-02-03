@@ -1,5 +1,4 @@
-
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenAI, Chat } from '@google/genai';
 import React, { useEffect, useRef, useState } from 'react';
 
 const Assistant: React.FC = () => {
@@ -9,7 +8,33 @@ const Assistant: React.FC = () => {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [chatSession, setChatSession] = useState<Chat | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Initialize Chat Session with memory
+  useEffect(() => {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+    const session = ai.chats.create({
+      model: 'gemini-3-flash-preview',
+      config: {
+        systemInstruction: `You are the AI Portfolio Assistant for INDRA VISUALS. 
+        Studio Founder: Indra.
+        Contact: indravisuals4858@gmail.com
+        
+        PRIORITY PROJECT: Our flagship work is the 'THUMBNAIL' (Editing), pinned at the start of our archive. It focuses on high-retention, cinematic visual hooks.
+        
+        Other Key Works: 
+        - FENIX ILLUSTRATION: Premium digital fox artwork.
+        - CAT ILLUSTRATION: Stylized character design.
+        - STORE LOGO: Minimalist brand identity solutions.
+        
+        Services: 2D Animation, Digital Illustration, Logo Design, and Video Editing.
+        Tone: Premium, concise, helpful. 
+        Constraint: Keep responses under 30 words. Always guide users to the 'EMAIL US' button or 'Bridge' section for business inquiries.`
+      }
+    });
+    setChatSession(session);
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -18,7 +43,7 @@ const Assistant: React.FC = () => {
   }, [messages, isOpen]);
 
   const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || !chatSession) return;
     
     const userMsg = input.trim();
     setInput('');
@@ -26,33 +51,12 @@ const Assistant: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents: { parts: [{ text: userMsg }] },
-        config: {
-          systemInstruction: `You are the AI Portfolio Assistant for INDRA VISUALS. 
-          Studio Founder: Indra.
-          PRIORITY FEATURE: Our primary archived work is THUMBNAIL (Editing), which is pinned at the start of our archive.
-          
-          Featured Work: 
-          1. THUMBNAIL (High-end video editing & high-retention thumbnails)
-          2. FENIX ILLUSTRATION (Cinematic digital painting of a fox)
-          3. CAT ILLUSTRATION (Stylized, expressive cat artwork)
-          4. STORE LOGO IDENTITY (Minimalist branding solutions)
-          
-          Services provided: 2D Animation, Digital Illustration, Logo Design, and Video Editing.
-          Tone: Premium, futuristic, inspiring, and very concise. 
-          Goal: Act as a concierge. Convert interest into inquiries. Keep answers under 25 words. 
-          If asked about pricing or starting a project, direct them to the 'Bridge' section or the 'EMAIL US' button.`
-        }
-      });
-
-      const aiText = response.text || "My neural link is momentarily unstable. Let's connect via the 'Bridge' section below!";
+      const response = await chatSession.sendMessage({ message: userMsg });
+      const aiText = response.text || "I'm experiencing a brief neural lag. Let's talk via email at indravisuals4858@gmail.com!";
       setMessages(prev => [...prev, { role: 'ai', text: aiText }]);
     } catch (error) {
-      console.error("Assistant Fault:", error);
-      setMessages(prev => [...prev, { role: 'ai', text: "A brief interference in the creative flow. Please reach out directly through our contact bridge!" }]);
+      console.error("Chat Error:", error);
+      setMessages(prev => [...prev, { role: 'ai', text: "Signal lost. Please reach out to Indra directly at our contact bridge!" }]);
     } finally {
       setIsLoading(false);
     }
@@ -61,19 +65,20 @@ const Assistant: React.FC = () => {
   return (
     <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[60]">
       {isOpen ? (
-        <div className="w-[calc(100vw-32px)] sm:w-[400px] h-[520px] glass rounded-[32px] flex flex-col shadow-2xl border border-white/10 overflow-hidden animate-[slideUp_0.4s_ease-out]">
+        <div className="w-[calc(100vw-32px)] sm:w-[380px] h-[500px] md:h-[550px] glass rounded-[32px] flex flex-col shadow-2xl border border-white/10 overflow-hidden animate-[slideUp_0.4s_ease-out]">
           <style>{`
             @keyframes slideUp {
               from { opacity: 0; transform: translateY(20px) scale(0.95); }
               to { opacity: 1; transform: translateY(0) scale(1); }
             }
           `}</style>
+          
           <div className="p-4 md:p-5 border-b border-white/5 bg-gradient-to-r from-indigo-600/90 to-purple-600/90 backdrop-blur-md flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white/20 flex items-center justify-center font-bold shadow-inner border border-white/10 text-white text-sm">I</div>
+              <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white/20 flex items-center justify-center font-bold shadow-inner border border-white/10 text-white text-xs">I</div>
               <div>
                 <span className="block font-bold text-[10px] md:text-[11px] tracking-widest uppercase leading-none text-white">Indra Assistant</span>
-                <span className="text-[8px] md:text-[9px] text-white/60 uppercase tracking-tighter">Visual Intelligence</span>
+                <span className="text-[8px] text-white/60 uppercase tracking-tighter">Memory Active</span>
               </div>
             </div>
             <button onClick={() => setIsOpen(false)} className="text-white/60 hover:text-white transition-colors p-1.5 hover:bg-white/10 rounded-full">
@@ -81,7 +86,7 @@ const Assistant: React.FC = () => {
             </button>
           </div>
 
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 md:p-5 space-y-4 bg-zinc-950/80">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-zinc-950/80 scroll-smooth">
             {messages.map((m, idx) => (
               <div key={idx} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-[12px] md:text-[13px] leading-relaxed ${m.role === 'user' ? 'bg-indigo-600 text-white rounded-tr-none shadow-lg shadow-indigo-500/20' : 'bg-zinc-900/50 border border-white/5 text-zinc-200 rounded-tl-none'}`}>
@@ -108,7 +113,7 @@ const Assistant: React.FC = () => {
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleSend()}
                 placeholder="Message Indra AI..."
-                className="w-full bg-zinc-900 border border-white/5 rounded-2xl px-5 py-3 md:py-3.5 pr-12 outline-none focus:border-indigo-500/50 text-xs md:text-sm transition-all focus:ring-1 focus:ring-indigo-500/20 text-white placeholder:text-zinc-600"
+                className="w-full bg-zinc-900 border border-white/5 rounded-2xl px-5 py-3 md:py-3.5 pr-12 outline-none focus:border-indigo-500/50 text-[12px] md:text-sm transition-all text-white placeholder:text-zinc-600"
               />
               <button 
                 onClick={handleSend}
