@@ -39,18 +39,11 @@ const App: React.FC = () => {
 
     const startup = async () => {
       try {
-        // 1. Initialize DB
         await initDB(); 
-        
-        // 2. Initial Fetch
         const storedProjects = await refreshProjects();
-        
         if (!mounted) return;
 
-        // 3. Force Seed if database is empty (Resilient to Netlify/Vercel state resets)
         if (storedProjects.length === 0) {
-          console.log("Archive Empty. Seeding initial artifacts...");
-          // We save them one by one to ensure transactions complete
           for (const p of INITIAL_PROJECTS) {
             try {
               await saveProject(p);
@@ -62,7 +55,7 @@ const App: React.FC = () => {
         }
       } catch (err) {
         console.error("Hardware Failure:", err);
-        if (mounted) setErrorState("Critical Engine Error: Database access was denied. Ensure you are not in a highly restrictive Private/Incognito window.");
+        if (mounted) setErrorState("Critical Engine Error: Database access was denied.");
       } finally {
         if (mounted) setIsLoading(false);
       }
@@ -76,17 +69,35 @@ const App: React.FC = () => {
     return () => { mounted = false; };
   }, [refreshProjects]);
 
-  // Reveal Animation Intersection Observer
+  // Enhanced Reveal Animation Intersection Observer with Stagger
   useEffect(() => {
     if (isLoading || errorState) return;
+
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('active');
+      // Sort entries that are intersecting by their vertical distance from the top
+      // to ensure they reveal in a sequential order
+      const intersectingEntries = entries
+        .filter(entry => entry.isIntersecting && !entry.target.classList.contains('active'))
+        .sort((a, b) => {
+          const aRect = a.target.getBoundingClientRect();
+          const bRect = b.target.getBoundingClientRect();
+          return aRect.top - bRect.top;
+        });
+
+      intersectingEntries.forEach((entry, index) => {
+        // Apply a temporal stagger for elements entering at the same time
+        setTimeout(() => {
+          entry.target.classList.add('active');
+        }, index * 100);
       });
-    }, { threshold: 0.05 });
+    }, { 
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px' // Start reveal slightly before it hits the view
+    });
 
     const revealElements = document.querySelectorAll('.reveal');
     revealElements.forEach(el => observer.observe(el));
+    
     return () => observer.disconnect();
   }, [view, isLoading, projects, errorState]);
 
@@ -125,7 +136,6 @@ const App: React.FC = () => {
       await refreshProjects();
     } catch (err) {
       console.error("Save Error:", err);
-      alert("System Overload: Storage limit reached or write access denied by browser.");
     }
   };
 
@@ -135,7 +145,6 @@ const App: React.FC = () => {
       await refreshProjects();
     } catch (err) {
       console.error("Purge Error:", err);
-      alert("Protocol Error: Memory sector could not be cleared.");
     }
   };
 
@@ -154,17 +163,9 @@ const App: React.FC = () => {
   if (errorState) {
     return (
       <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center p-8 text-center">
-        <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mb-8 border border-red-500/20">
-          <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-        </div>
         <h2 className="syncopate text-xl font-bold text-white mb-4 uppercase">System Link Failure</h2>
-        <p className="text-zinc-500 text-sm max-w-md mb-8 leading-relaxed font-light">{errorState}</p>
-        <button 
-          onClick={() => window.location.reload()}
-          className="px-8 py-4 bg-indigo-600 text-white rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-indigo-700 transition-all cursor-pointer"
-        >
-          Retry Calibration
-        </button>
+        <p className="text-zinc-500 text-sm max-w-md mb-8">{errorState}</p>
+        <button onClick={() => window.location.reload()} className="px-8 py-4 bg-indigo-600 text-white rounded-full uppercase tracking-widest hover:bg-indigo-700 transition-all cursor-pointer">Retry Calibration</button>
       </div>
     );
   }
@@ -175,10 +176,6 @@ const App: React.FC = () => {
         <div className="relative">
           <div className="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full flex items-center justify-center font-bold text-white text-2xl animate-pulse shadow-[0_0_30px_#6366f1]">I</div>
           <div className="absolute inset-0 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin"></div>
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-[10px] text-zinc-500 uppercase tracking-[0.3em] font-black">Syncing Visual Engine</span>
-          <span className="text-[7px] text-zinc-700 uppercase tracking-widest animate-pulse">Allocating sectors...</span>
         </div>
       </div>
     );
@@ -213,11 +210,11 @@ const App: React.FC = () => {
       
       <main className="relative z-10">
         <section id="home"><Hero /></section>
-        <section id="work" className="py-16 md:py-24 reveal">
+        <section id="work" className="py-16 md:py-24">
           <ProjectGallery projects={projects} />
         </section>
-        <section id="services" className="py-16 md:py-24 reveal"><ServiceSection /></section>
-        <section id="contact" className="py-16 md:py-24 reveal"><ContactSection /></section>
+        <section id="services" className="py-16 md:py-24"><ServiceSection /></section>
+        <section id="contact" className="py-16 md:py-24"><ContactSection /></section>
       </main>
 
       <Footer />

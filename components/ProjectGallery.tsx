@@ -19,7 +19,7 @@ const ProjectGallery: React.FC<ProjectGalleryProps> = ({ projects }) => {
 
   return (
     <div className="container mx-auto px-6">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20 reveal">
         <div>
           <h2 className="syncopate text-4xl md:text-5xl font-bold mb-4 tracking-tighter uppercase">SELECTED ARCHIVES</h2>
           <p className="text-zinc-400 max-w-lg font-light leading-relaxed">A curated collection of visual storytelling across motion, design, and art.</p>
@@ -38,14 +38,12 @@ const ProjectGallery: React.FC<ProjectGalleryProps> = ({ projects }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-        {filteredProjects.map((project, idx) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+        {filteredProjects.map((project) => (
           <div 
             key={project.id}
             className="group relative flex flex-col reveal"
-            style={{ transitionDelay: `${Math.min(idx * 50, 400)}ms` }}
           >
-            {/* Pure Visual Display - All Clicks Removed */}
             <div 
               className="relative aspect-[4/5] overflow-hidden rounded-[32px] bg-zinc-950 border border-white/5 transition-all duration-700 hover:border-indigo-500/20 shadow-2xl"
             >
@@ -56,8 +54,7 @@ const ProjectGallery: React.FC<ProjectGalleryProps> = ({ projects }) => {
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000"
               />
               
-              {/* Overlay with Meta Info */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-700"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-700"></div>
               
               <div className="absolute inset-0 p-8 flex flex-col justify-end">
                 <span className="text-indigo-400 text-[9px] font-black tracking-[0.4em] uppercase mb-2">
@@ -66,12 +63,11 @@ const ProjectGallery: React.FC<ProjectGalleryProps> = ({ projects }) => {
                 <h3 className="syncopate text-xl font-bold text-white uppercase tracking-tighter mb-1">
                   {project.title}
                 </h3>
-                <p className="text-zinc-400 text-[10px] font-light leading-relaxed max-w-[80%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-2 group-hover:translate-y-0">
+                <p className="text-zinc-400 text-[10px] font-light leading-relaxed max-w-[85%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-2 group-hover:translate-y-0">
                   {project.description}
                 </p>
               </div>
 
-              {/* Status Indicator */}
               <div className="absolute top-6 right-6 flex items-center gap-2 px-3 py-1 bg-black/40 backdrop-blur-md rounded-full border border-white/5">
                 <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_#6366f1]"></div>
                 <span className="text-[7px] font-black text-white/60 tracking-widest uppercase">ARCHIVED</span>
@@ -82,15 +78,10 @@ const ProjectGallery: React.FC<ProjectGalleryProps> = ({ projects }) => {
       </div>
 
       {filteredProjects.length === 0 && (
-        <div className="py-40 text-center">
+        <div className="py-40 text-center reveal">
           <span className="text-zinc-700 text-[10px] font-black uppercase tracking-[0.5em]">No entries found in this sector.</span>
         </div>
       )}
-
-      <style dangerouslySetInnerHTML={{ __html: `
-        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-      `}} />
     </div>
   );
 };

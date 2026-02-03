@@ -80,10 +80,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onCancel }) => {
             </button>
           </div>
         </form>
-        
-        <p className="mt-8 text-center text-zinc-600 text-[10px] tracking-widest">
-          DEFAULT CREDENTIALS: admin / indra123
-        </p>
       </div>
     </div>
   );

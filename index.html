@@ -26,8 +26,8 @@
       ::-webkit-scrollbar-thumb:hover { background: #555; }
       
       .glass {
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 255, 255, 0.05);
       }
       
@@ -44,22 +44,27 @@
       }
       .animate-float { animation: float 6s ease-in-out infinite; }
 
-      /* Reveal Animation Utility */
+      /* Enhanced Reveal Animation Utility */
       .reveal {
         opacity: 0;
-        transform: translateY(40px);
-        transition: all 0.8s cubic-bezier(0.17, 0.55, 0.55, 1);
+        transform: translateY(30px) scale(0.98);
+        transition: 
+          opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+          transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: transform, opacity;
+        pointer-events: none;
       }
       .reveal.active {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
       }
 
       /* Custom Cursor Styles */
       #custom-cursor {
         position: fixed;
-        width: 12px;
-        height: 12px;
+        width: 10px;
+        height: 10px;
         background: white;
         border-radius: 50%;
         pointer-events: none;
@@ -69,16 +74,16 @@
       }
       #custom-cursor-follower {
         position: fixed;
-        width: 40px;
-        height: 40px;
-        border: 1px solid rgba(255,255,255,0.3);
+        width: 36px;
+        height: 36px;
+        border: 1px solid rgba(255,255,255,0.25);
         border-radius: 50%;
         pointer-events: none;
         z-index: 9998;
-        transition: transform 0.1s ease-out;
+        transition: transform 0.15s ease-out;
       }
       
-      .cursor-hover #custom-cursor { transform: scale(4); }
+      .cursor-hover #custom-cursor { transform: scale(5); }
       .cursor-hover #custom-cursor-follower { transform: scale(0); }
 
       /* Hide custom cursor on mobile */
@@ -102,13 +107,11 @@
     <div id="custom-cursor"></div>
     <div id="custom-cursor-follower"></div>
     
-    <!-- The Root Element for React -->
     <div id="root"></div>
 
     <script type="module" src="index.tsx"></script>
 
     <script>
-      // Global Cursor Movement
       const cursor = document.getElementById('custom-cursor');
       const follower = document.getElementById('custom-cursor-follower');
       
@@ -117,15 +120,13 @@
           cursor.style.left = e.clientX + 'px';
           cursor.style.top = e.clientY + 'px';
           
-          // Follower with slight lag
           setTimeout(() => {
-            follower.style.left = (e.clientX - 14) + 'px';
-            follower.style.top = (e.clientY - 14) + 'px';
-          }, 50);
+            follower.style.left = (e.clientX - 18) + 'px';
+            follower.style.top = (e.clientY - 18) + 'px';
+          }, 40);
         }
       });
 
-      // Hover Detection for UI elements
       document.addEventListener('mouseover', (e) => {
         if (e.target.closest('button, a, input, select, textarea, .cursor-pointer')) {
           document.body.classList.add('cursor-hover');

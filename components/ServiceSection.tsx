@@ -5,16 +5,16 @@ import { SERVICES } from './constants';
 const ServiceSection: React.FC = () => {
   return (
     <div className="container mx-auto px-6">
-      <div className="max-w-4xl mb-20">
-        <h2 className="syncopate text-4xl md:text-5xl font-bold mb-6">UNMATCHED <br /><span className="text-indigo-500">EXPERTISE</span></h2>
-        <p className="text-zinc-400 text-xl">We combine technical mastery with artistic vision to create unforgettable brand experiences.</p>
+      <div className="max-w-4xl mb-24 reveal">
+        <h2 className="syncopate text-4xl md:text-5xl font-bold mb-6 uppercase tracking-tight">UNMATCHED <br /><span className="text-indigo-500">EXPERTISE</span></h2>
+        <p className="text-zinc-400 text-xl font-light">We combine technical mastery with artistic vision to create unforgettable brand experiences across all digital surfaces.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {SERVICES.map((service, idx) => (
           <div 
             key={idx}
-            className="group glass p-10 rounded-3xl hover:bg-white/[0.05] transition-all duration-500 border-l-4 border-l-transparent hover:border-l-indigo-500"
+            className="reveal group glass p-10 rounded-[32px] hover:bg-white/[0.04] transition-all duration-700 border-l-4 border-l-transparent hover:border-l-indigo-500"
           >
             <div className="w-16 h-16 bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500">
               <svg className="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -22,13 +22,13 @@ const ServiceSection: React.FC = () => {
               </svg>
             </div>
 
-            <h3 className="syncopate text-2xl font-bold mb-4">{service.title}</h3>
-            <p className="text-zinc-400 mb-8 leading-relaxed">{service.description}</p>
+            <h3 className="syncopate text-2xl font-bold mb-4 uppercase tracking-tighter">{service.title}</h3>
+            <p className="text-zinc-400 mb-8 leading-relaxed font-light">{service.description}</p>
 
-            <ul className="grid grid-cols-2 gap-3">
+            <ul className="grid grid-cols-2 gap-4">
               {service.features.map((feature, fIdx) => (
-                <li key={fIdx} className="flex items-center gap-2 text-sm font-medium text-zinc-300">
-                  <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></div>
+                <li key={fIdx} className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300 transition-colors">
+                  <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full group-hover:shadow-[0_0_8px_#6366f1]"></div>
                   {feature}
                 </li>
               ))}
@@ -38,7 +38,7 @@ const ServiceSection: React.FC = () => {
       </div>
       
       {/* Visual Accents */}
-      <div className="mt-24 py-20 border-y border-white/5 overflow-hidden">
+      <div className="mt-24 py-20 border-y border-white/5 overflow-hidden reveal">
         <div className="flex animate-marquee whitespace-nowrap">
           {[1,2,3,4].map(i => (
             <div key={i} className="flex items-center gap-12 px-12">
@@ -61,11 +61,11 @@ const ServiceSection: React.FC = () => {
         }
         .animate-marquee {
           display: flex;
-          animation: marquee 40s linear infinite;
+          animation: marquee 50s linear infinite;
         }
         .outline-text {
           color: transparent;
-          -webkit-text-stroke: 1px rgba(255,255,255,0.2);
+          -webkit-text-stroke: 1px rgba(255,255,255,0.15);
         }
       `}} />
     </div>
