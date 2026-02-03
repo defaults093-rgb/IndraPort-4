@@ -12,9 +12,21 @@ const ProjectGallery: React.FC<ProjectGalleryProps> = ({ projects }) => {
   const categories: (Category | 'All')[] = ['All', 'Animation', 'Illustration', 'Logo Design', 'Editing'];
 
   const filteredProjects = useMemo(() => {
-    return filter === 'All' 
-      ? projects 
+    let list = filter === 'All' 
+      ? [...projects]
       : projects.filter(p => p.category === filter);
+
+    // Pinning Logic: Ensure 'thumbnail-editing' is always at index 0 if it exists in the current list
+    const pinnedId = 'thumbnail-editing';
+    const pinnedIndex = list.findIndex(p => p.id === pinnedId);
+    
+    if (pinnedIndex > -1) {
+      const pinnedItem = list[pinnedIndex];
+      const otherItems = list.filter((_, i) => i !== pinnedIndex);
+      return [pinnedItem, ...otherItems];
+    }
+    
+    return list;
   }, [projects, filter]);
 
   return (
@@ -68,9 +80,19 @@ const ProjectGallery: React.FC<ProjectGalleryProps> = ({ projects }) => {
                 </p>
               </div>
 
+              {/* Status Badge */}
               <div className="absolute top-6 right-6 flex items-center gap-2 px-3 py-1 bg-black/40 backdrop-blur-md rounded-full border border-white/5">
-                <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_#6366f1]"></div>
-                <span className="text-[7px] font-black text-white/60 tracking-widest uppercase">ARCHIVED</span>
+                {project.id === 'thumbnail-editing' ? (
+                  <>
+                    <div className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24] animate-pulse"></div>
+                    <span className="text-[7px] font-black text-amber-400 tracking-widest uppercase">FEATURED</span>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_#6366f1]"></div>
+                    <span className="text-[7px] font-black text-white/60 tracking-widest uppercase">ARCHIVED</span>
+                  </>
+                )}
               </div>
             </div>
           </div>

@@ -30,7 +30,7 @@ const Footer: React.FC = () => {
     },
     { 
       name: 'Email', 
-      url: 'mailto:defaults093@gmail.com',
+      url: 'mailto:indravisuals4858@gmail.com',
       brandColor: 'hover:border-indigo-500 hover:shadow-[0_0_20px_rgba(99,102,241,0.4)]',
       glowColor: 'bg-indigo-500',
       icon: (
@@ -42,28 +42,28 @@ const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="py-20 border-t border-white/5 bg-zinc-950/20">
+    <footer className="py-12 md:py-20 border-t border-white/5 bg-zinc-950/20">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-12 mb-16 md:mb-20">
           <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center gap-2 mb-8">
-              <div className="w-12 h-12 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full flex items-center justify-center font-bold text-white text-xl shadow-[0_0_20px_rgba(99,102,241,0.3)]">
+            <div className="flex items-center gap-2 mb-6 md:mb-8">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full flex items-center justify-center font-bold text-white text-lg md:text-xl shadow-[0_0_20px_rgba(99,102,241,0.3)]">
                 I
               </div>
-              <span className="syncopate text-2xl font-bold tracking-tighter">INDRA VISUALS</span>
+              <span className="syncopate text-xl md:text-2xl font-bold tracking-tighter">INDRA VISUALS</span>
             </div>
-            <p className="text-zinc-500 max-w-sm mb-10 leading-relaxed font-light">
+            <p className="text-zinc-500 max-w-sm mb-8 md:mb-10 leading-relaxed font-light text-sm">
               A creative laboratory pushing the boundaries of visual communication through animation and design excellence.
             </p>
             
-            <div className="flex flex-wrap gap-5">
+            <div className="flex flex-wrap gap-4 md:gap-5">
               {socials.map((social) => (
                 <a 
                   key={social.name} 
                   href={social.url} 
                   target={social.name === 'Email' ? '_self' : '_blank'} 
                   rel="noopener noreferrer"
-                  className={`group relative w-14 h-14 flex items-center justify-center rounded-2xl glass border border-white/10 transition-all duration-500 ${social.brandColor} hover:-translate-y-2`}
+                  className={`group relative w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-2xl glass border border-white/10 transition-all duration-500 ${social.brandColor} hover:-translate-y-2`}
                   title={social.name}
                 >
                   <div className="text-zinc-400 group-hover:text-white transition-colors duration-300 relative z-10">
@@ -77,7 +77,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          <div>
+          <div className="hidden md:block">
             <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-white mb-8">Navigation</h4>
             <ul className="space-y-4 text-zinc-500 text-sm">
               <li><a href="#home" className="hover:text-indigo-400 transition-colors flex items-center gap-2 group"><span className="w-0 group-hover:w-2 h-[1px] bg-indigo-500 transition-all"></span>Identity</a></li>
@@ -87,7 +87,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          <div>
+          <div className="hidden md:block">
             <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-white mb-8">Capabilities</h4>
             <ul className="space-y-4 text-zinc-500 text-sm">
               <li className="flex items-center gap-3"><span className="w-1 h-1 rounded-full bg-indigo-500"></span> 2D Animation</li>
@@ -99,9 +99,9 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center justify-between pt-12 border-t border-white/5 gap-6">
-          <p className="text-zinc-600 text-[10px] font-bold tracking-[0.2em] uppercase">© {new Date().getFullYear()} Indra Visuals. Precision Engineered.</p>
-          <div className="flex gap-8 text-zinc-600 text-[10px] font-bold tracking-[0.2em] uppercase">
+        <div className="flex flex-col md:flex-row items-center justify-between pt-8 md:pt-12 border-t border-white/5 gap-4 md:gap-6">
+          <p className="text-zinc-600 text-[9px] md:text-[10px] font-bold tracking-[0.2em] uppercase text-center md:text-left">© {new Date().getFullYear()} Indra Visuals. Precision Engineered.</p>
+          <div className="flex gap-6 md:gap-8 text-zinc-600 text-[9px] md:text-[10px] font-bold tracking-[0.2em] uppercase">
             <a href="#" className="hover:text-zinc-400 transition-colors">Privacy Protocol</a>
             <a href="#" className="hover:text-zinc-400 transition-colors">Terms of Engagement</a>
           </div>

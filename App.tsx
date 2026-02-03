@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -58,13 +57,12 @@ const App: React.FC = () => {
 
         if (!mounted) return;
 
-        // Check if we need to sync with the updated INITIAL_PROJECTS list
-        // Looking for the newest Cat Illustration ID to trigger a re-sync
-        const hasNewContent = storedProjects.some(p => p.id === 'cat-illustration');
-        const needsSync = storedProjects.length === 0 || !hasNewContent;
+        // Force a re-sync if the first project is not 'thumbnail-editing' to ensure new order
+        const currentOrderCorrect = storedProjects.length > 0 && storedProjects[0].id === 'thumbnail-editing';
+        const needsSync = storedProjects.length === 0 || !currentOrderCorrect;
 
         if (needsSync) {
-          console.log(`[Visual Engine] Syncing updated archives: Cat Illustration & Store Logo V3...`);
+          console.log(`[Visual Engine] Re-syncing manifest for optimal sequence: Thumbnail First...`);
           await seedDatabase(INITIAL_PROJECTS);
           await refreshProjects();
         }

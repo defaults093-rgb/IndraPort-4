@@ -29,54 +29,69 @@ const Assistant: React.FC = () => {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Context: You are the AI Portfolio Assistant for INDRA VISUALS. 
-        Owner: Indra.
-        Specialties: 2D Animation (frame-by-frame, rigging), Cinematic Illustration, Minimalist Logo Design, Dynamic Video Editing.
-        Style: High-end, futuristic, creative, professional.
-        Goal: Convert visitors into clients and answer questions about Indra's work.
-        User Query: ${userMsg}`,
+        contents: { parts: [{ text: userMsg }] },
         config: {
-          systemInstruction: "Keep responses under 2 sentences. Use elegant and inspiring language. If asked about contact, mention the 'Bridge' section."
+          systemInstruction: `You are the AI Portfolio Assistant for INDRA VISUALS. 
+          Studio Founder: Indra.
+          PRIORITY FEATURE: Our primary archived work is THUMBNAIL (Editing), which is pinned at the start of our archive.
+          
+          Featured Work: 
+          1. THUMBNAIL (High-end video editing & high-retention thumbnails)
+          2. FENIX ILLUSTRATION (Cinematic digital painting of a fox)
+          3. CAT ILLUSTRATION (Stylized, expressive cat artwork)
+          4. STORE LOGO IDENTITY (Minimalist branding solutions)
+          
+          Services provided: 2D Animation, Digital Illustration, Logo Design, and Video Editing.
+          Tone: Premium, futuristic, inspiring, and very concise. 
+          Goal: Act as a concierge. Convert interest into inquiries. Keep answers under 25 words. 
+          If asked about pricing or starting a project, direct them to the 'Bridge' section or the 'EMAIL US' button.`
         }
       });
 
-      const aiText = response.text || "My creative intuition is briefly offline. Let's connect via the contact form!";
+      const aiText = response.text || "My neural link is momentarily unstable. Let's connect via the 'Bridge' section below!";
       setMessages(prev => [...prev, { role: 'ai', text: aiText }]);
     } catch (error) {
-      setMessages(prev => [...prev, { role: 'ai', text: "A brief interference in the creative flow. Please try again or reach out directly!" }]);
+      console.error("Assistant Fault:", error);
+      setMessages(prev => [...prev, { role: 'ai', text: "A brief interference in the creative flow. Please reach out directly through our contact bridge!" }]);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-[60]">
+    <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[60]">
       {isOpen ? (
-        <div className="w-[320px] sm:w-[400px] h-[520px] glass rounded-[32px] flex flex-col shadow-2xl border border-indigo-500/30 overflow-hidden animate-[slideUp_0.4s_ease-out]">
-          <div className="p-5 border-b border-white/5 bg-gradient-to-r from-indigo-600 to-purple-600 flex items-center justify-between">
+        <div className="w-[calc(100vw-32px)] sm:w-[400px] h-[520px] glass rounded-[32px] flex flex-col shadow-2xl border border-white/10 overflow-hidden animate-[slideUp_0.4s_ease-out]">
+          <style>{`
+            @keyframes slideUp {
+              from { opacity: 0; transform: translateY(20px) scale(0.95); }
+              to { opacity: 1; transform: translateY(0) scale(1); }
+            }
+          `}</style>
+          <div className="p-4 md:p-5 border-b border-white/5 bg-gradient-to-r from-indigo-600/90 to-purple-600/90 backdrop-blur-md flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center font-bold shadow-inner">I</div>
+              <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white/20 flex items-center justify-center font-bold shadow-inner border border-white/10 text-white text-sm">I</div>
               <div>
-                <span className="block font-bold text-sm tracking-widest uppercase leading-none">Indra AI</span>
-                <span className="text-[10px] text-white/60 uppercase tracking-tighter">Creative Concierge</span>
+                <span className="block font-bold text-[10px] md:text-[11px] tracking-widest uppercase leading-none text-white">Indra Assistant</span>
+                <span className="text-[8px] md:text-[9px] text-white/60 uppercase tracking-tighter">Visual Intelligence</span>
               </div>
             </div>
-            <button onClick={() => setIsOpen(false)} className="text-white/60 hover:text-white transition-colors">
+            <button onClick={() => setIsOpen(false)} className="text-white/60 hover:text-white transition-colors p-1.5 hover:bg-white/10 rounded-full">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
           </div>
 
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-5 space-y-4 bg-zinc-950/80 scrollbar-hide">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 md:p-5 space-y-4 bg-zinc-950/80">
             {messages.map((m, idx) => (
               <div key={idx} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${m.role === 'user' ? 'bg-indigo-600 text-white rounded-tr-none shadow-lg shadow-indigo-500/20' : 'glass text-zinc-200 rounded-tl-none border-zinc-800'}`}>
+                <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-[12px] md:text-[13px] leading-relaxed ${m.role === 'user' ? 'bg-indigo-600 text-white rounded-tr-none shadow-lg shadow-indigo-500/20' : 'bg-zinc-900/50 border border-white/5 text-zinc-200 rounded-tl-none'}`}>
                   {m.text}
                 </div>
               </div>
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="glass px-4 py-3 rounded-2xl flex gap-1.5 items-center">
+                <div className="bg-zinc-900/50 px-4 py-3 rounded-2xl flex gap-1.5 items-center">
                   <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse"></span>
                   <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse delay-150"></span>
                   <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse delay-300"></span>
@@ -85,49 +100,40 @@ const Assistant: React.FC = () => {
             )}
           </div>
 
-          <div className="p-5 border-t border-white/5 bg-zinc-950">
+          <div className="p-3 md:p-4 border-t border-white/5 bg-zinc-950/90">
             <div className="relative group">
               <input
                 type="text"
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleSend()}
-                placeholder="Ask about animation or design..."
-                className="w-full bg-zinc-900/50 border border-zinc-800 rounded-2xl px-5 py-3 pr-12 outline-none focus:border-indigo-500/50 text-sm transition-all focus:ring-1 focus:ring-indigo-500/20"
+                placeholder="Message Indra AI..."
+                className="w-full bg-zinc-900 border border-white/5 rounded-2xl px-5 py-3 md:py-3.5 pr-12 outline-none focus:border-indigo-500/50 text-xs md:text-sm transition-all focus:ring-1 focus:ring-indigo-500/20 text-white placeholder:text-zinc-600"
               />
               <button 
                 onClick={handleSend}
                 disabled={!input.trim() || isLoading}
-                className={`absolute right-3 top-1/2 -translate-y-1/2 transition-all ${input.trim() ? 'text-indigo-500 scale-110' : 'text-zinc-700'}`}
+                className={`absolute right-3 top-1/2 -translate-y-1/2 transition-all p-1.5 md:p-2 rounded-xl ${input.trim() ? 'text-indigo-400 hover:bg-indigo-500/10' : 'text-zinc-800'}`}
               >
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                </svg>
               </button>
             </div>
           </div>
         </div>
       ) : (
-        <button 
+        <button
           onClick={() => setIsOpen(true)}
-          className="w-16 h-16 bg-indigo-600 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95 group relative ring-4 ring-indigo-500/10"
+          className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white shadow-2xl shadow-indigo-500/40 hover:scale-110 transition-all duration-300 group relative"
+          aria-label="Open Assistant"
         >
-          <div className="absolute -top-12 right-0 glass px-4 py-2 rounded-xl text-[10px] font-bold tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0 whitespace-nowrap shadow-xl">
-            Inquire within
-          </div>
-          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
-          <span className="absolute -top-1 -right-1 w-5 h-5 bg-purple-500 rounded-full border-4 border-zinc-950 flex items-center justify-center">
-            <span className="w-1.5 h-1.5 bg-white rounded-full animate-ping"></span>
-          </span>
+          <svg className="w-5 h-5 md:w-6 md:h-6 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+          </svg>
+          <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-red-500 border-2 border-[#020202] rounded-full animate-bounce"></span>
         </button>
       )}
-
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(30px) scale(0.9); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-      `}} />
     </div>
   );
 };

@@ -1,27 +1,12 @@
-
 import { Project, Service } from '../types';
 
 export const PROJECTS: Project[] = [
   {
-    id: 'store-logo-v1',
-    title: 'STORE LOGO',
-    category: 'Logo Design',
-    imageUrl: 'https://images.unsplash.com/photo-1770135939978-12ec7363a3de?q=80&w=2000&auto=format&fit=crop',
-    description: 'This is a logo design created for a store. It represents the store’s identity and is designed to look professional, simple, and memorable.'
-  },
-  {
-    id: 'store-logo-v2',
-    title: 'STORE LOGO',
-    category: 'Logo Design',
-    imageUrl: 'https://images.unsplash.com/photo-1770137013310-0f100329e186?q=80&w=2000&auto=format&fit=crop',
-    description: 'A detailed presentation of the store identity, showcasing the professional and clean aesthetic of the brand across secondary applications.'
-  },
-  {
-    id: 'store-logo-v3',
-    title: 'STORE LOGO',
-    category: 'Logo Design',
-    imageUrl: 'https://images.unsplash.com/photo-1770137013294-4d2869814f6e?q=80&w=2000&auto=format&fit=crop',
-    description: 'A clean and modern store logo identity emphasizing minimalist aesthetics and professional brand presence.'
+    id: 'thumbnail-editing',
+    title: 'THUMBNAIL',
+    category: 'Editing',
+    imageUrl: 'https://images.unsplash.com/photo-1770137098448-5b16ef7f2346?w=2000&auto=format&fit=crop',
+    description: 'Professional high-retention thumbnail design with advanced color grading and attention-grabbing visual elements.'
   },
   {
     id: 'fenix-illustration',
@@ -38,11 +23,25 @@ export const PROJECTS: Project[] = [
     description: 'A vibrant and expressive digital illustration featuring a stylized cat character with cinematic lighting.'
   },
   {
-    id: 'thumbnail-editing',
-    title: 'THUMBNAIL',
-    category: 'Editing',
-    imageUrl: 'https://images.unsplash.com/photo-1770137098448-5b16ef7f2346?w=2000&auto=format&fit=crop',
-    description: 'Professional high-retention thumbnail design with advanced color grading and attention-grabbing visual elements.'
+    id: 'store-logo-v3',
+    title: 'STORE LOGO',
+    category: 'Logo Design',
+    imageUrl: 'https://images.unsplash.com/photo-1770137013294-4d2869814f6e?q=80&w=2000&auto=format&fit=crop',
+    description: 'A clean and modern store logo identity emphasizing minimalist aesthetics and professional brand presence.'
+  },
+  {
+    id: 'store-logo-v2',
+    title: 'STORE LOGO',
+    category: 'Logo Design',
+    imageUrl: 'https://images.unsplash.com/photo-1770137013310-0f100329e186?q=80&w=2000&auto=format&fit=crop',
+    description: 'A detailed presentation of the store identity, showcasing the professional and clean aesthetic of the brand across secondary applications.'
+  },
+  {
+    id: 'store-logo-v1',
+    title: 'STORE LOGO',
+    category: 'Logo Design',
+    imageUrl: 'https://images.unsplash.com/photo-1770135939978-12ec7363a3de?q=80&w=2000&auto=format&fit=crop',
+    description: 'This is a logo design created for a store. It represents the store’s identity and is designed to look professional, simple, and memorable.'
   }
 ];
 
