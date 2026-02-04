@@ -82,12 +82,12 @@ const Hero: React.FC = () => {
           </div>
         </div>
         
-        <h1 className="syncopate text-2xl sm:text-4xl md:text-6xl lg:text-8xl font-bold tracking-tighter leading-[1.2] md:leading-[1.1] mb-8 md:mb-10 break-words reveal px-2">
+        <h1 className="syncopate text-3xl sm:text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[1.1] md:leading-[0.95] mb-10 md:mb-14 break-words reveal px-2">
           <TypingHeader text="WELCOME TO INDRA" delay={400} /><br />
-          <TypingHeader text="VISUALS SOLUTION" delay={1800} gradient={true} className="mt-2" />
+          <TypingHeader text="VISUAL SOLUTIONS" delay={1800} gradient={true} className="mt-2" />
         </h1>
 
-        <p className="max-w-xl mx-auto text-[11px] sm:text-base md:text-xl text-zinc-400 mb-10 md:mb-12 px-6 reveal font-light leading-relaxed">
+        <p className="max-w-xl mx-auto text-[11px] sm:text-base md:text-xl text-zinc-400 mb-10 md:mb-14 px-6 reveal font-light leading-relaxed">
           Elite 2D animation, cinematic illustration, and high-impact visual design. We turn abstract concepts into digital reality.
         </p>
 
