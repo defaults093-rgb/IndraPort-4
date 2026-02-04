@@ -57,11 +57,12 @@ const Hero: React.FC = () => {
   };
 
   const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center pt-20 md:pt-24 pb-12 relative px-4 sm:px-6 overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center pt-24 pb-12 relative px-4 sm:px-6 overflow-hidden">
       {/* Background Glow */}
       <div 
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl aspect-square bg-gradient-to-br from-indigo-500/10 to-purple-500/5 blur-[80px] md:blur-[160px] rounded-full -z-10 pointer-events-none"
@@ -69,34 +70,34 @@ const Hero: React.FC = () => {
       ></div>
 
       <div className="text-center w-full max-w-6xl mx-auto relative z-10">
-        <div className="mb-6 md:mb-8 reveal">
-          <div className="inline-flex items-center gap-2 md:gap-3 px-3 md:px-4 py-1.5 md:py-2 rounded-full border border-indigo-500/20 text-indigo-400 glass">
+        <div className="mb-8 md:mb-10 reveal">
+          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-indigo-500/20 text-indigo-400 glass">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
             </span>
-            <span className="text-[7px] sm:text-[8px] md:text-[10px] font-bold tracking-[0.2em] uppercase tabular-nums">
-              {formatTime(time)} • AVAILABLE FOR HIRE
+            <span className="text-[9px] md:text-[10px] font-bold tracking-[0.2em] uppercase tabular-nums">
+              {formatTime(time)} • REMOTE WORLDWIDE
             </span>
           </div>
         </div>
         
-        <h1 className="syncopate text-lg sm:text-4xl md:text-6xl lg:text-8xl font-bold tracking-tighter leading-[1.3] sm:leading-[1.2] md:leading-[1.1] mb-6 md:mb-10 break-words reveal px-2">
+        <h1 className="syncopate text-2xl sm:text-4xl md:text-6xl lg:text-8xl font-bold tracking-tighter leading-[1.2] md:leading-[1.1] mb-8 md:mb-10 break-words reveal px-2">
           <TypingHeader text="WELCOME TO INDRA" delay={400} /><br />
-          <TypingHeader text="VISUALS SOLUTION" delay={1800} gradient={true} className="mt-1" />
+          <TypingHeader text="VISUALS SOLUTION" delay={1800} gradient={true} className="mt-2" />
         </h1>
 
-        <p className="max-w-xl mx-auto text-[10px] sm:text-base md:text-xl text-zinc-400 mb-8 md:mb-12 px-6 reveal font-light leading-relaxed">
+        <p className="max-w-xl mx-auto text-[11px] sm:text-base md:text-xl text-zinc-400 mb-10 md:mb-12 px-6 reveal font-light leading-relaxed">
           Elite 2D animation, cinematic illustration, and high-impact visual design. We turn abstract concepts into digital reality.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-3 md:gap-5 justify-center items-center px-6 reveal w-full max-w-lg mx-auto">
+        <div className="flex flex-col sm:flex-row gap-4 md:gap-5 justify-center items-center px-6 reveal w-full max-w-lg mx-auto">
           <button 
             onClick={() => scrollTo('work')}
-            className="w-full sm:w-auto group relative px-6 md:px-10 py-3.5 md:py-5 bg-indigo-600 rounded-full font-bold transition-all flex items-center justify-center gap-2 overflow-hidden shadow-2xl shadow-indigo-500/20"
+            className="w-full sm:w-auto group relative px-8 md:px-10 py-4 md:py-5 bg-indigo-600 rounded-full font-bold transition-all flex items-center justify-center gap-2 overflow-hidden shadow-2xl shadow-indigo-500/20 active:scale-95"
           >
-            <span className="relative z-10 uppercase tracking-widest text-[9px] md:text-sm">Explore Archives</span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 md:h-5 md:w-5 relative z-10 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <span className="relative z-10 uppercase tracking-widest text-[10px] md:text-sm">Explore Archives</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-5 md:w-5 relative z-10 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
@@ -104,9 +105,9 @@ const Hero: React.FC = () => {
           
           <button 
             onClick={() => scrollTo('contact')}
-            className="w-full sm:w-auto px-6 md:px-10 py-3.5 md:py-5 glass border border-zinc-800 rounded-full font-bold transition-all flex items-center justify-center gap-2 hover:border-zinc-500 hover:bg-zinc-800/50"
+            className="w-full sm:w-auto px-8 md:px-10 py-4 md:py-5 glass border border-zinc-800 rounded-full font-bold transition-all flex items-center justify-center gap-2 hover:border-zinc-500 hover:bg-zinc-800/50 active:scale-95"
           >
-            <span className="uppercase tracking-widest text-[9px] md:text-sm">The Bridge</span>
+            <span className="uppercase tracking-widest text-[10px] md:text-sm">The Bridge</span>
           </button>
         </div>
       </div>

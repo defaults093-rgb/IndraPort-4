@@ -1,5 +1,5 @@
 import { GoogleGenAI, Chat } from '@google/genai';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 const Assistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,30 +11,33 @@ const Assistant: React.FC = () => {
   const [chatSession, setChatSession] = useState<Chat | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Initialize Chat Session with memory
-  useEffect(() => {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
-    const session = ai.chats.create({
-      model: 'gemini-3-flash-preview',
-      config: {
-        systemInstruction: `You are the AI Portfolio Assistant for INDRA VISUALS. 
-        Studio Founder: Indra.
-        Contact: indravisuals4858@gmail.com
-        
-        PRIORITY PROJECT: Our flagship work is the 'THUMBNAIL' (Editing), pinned at the start of our archive. It focuses on high-retention, cinematic visual hooks.
-        
-        Other Key Works: 
-        - FENIX ILLUSTRATION: Premium digital fox artwork.
-        - CAT ILLUSTRATION: Stylized character design.
-        - STORE LOGO: Minimalist brand identity solutions.
-        
-        Services: 2D Animation, Digital Illustration, Logo Design, and Video Editing.
-        Tone: Premium, concise, helpful. 
-        Constraint: Keep responses under 30 words. Always guide users to the 'EMAIL US' button or 'Bridge' section for business inquiries.`
-      }
-    });
-    setChatSession(session);
+  // Initialize Chat Session with memory correctly
+  const initChat = useCallback(() => {
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      const session = ai.chats.create({
+        model: 'gemini-3-flash-preview',
+        config: {
+          systemInstruction: `You are the Official AI Assistant for INDRA VISUALS.
+          Studio Head: Indra.
+          Contact Email: indravisuals4858@gmail.com
+          
+          Portfolio Priorities:
+          - Flagship Project: THUMBNAIL (Editing). High-retention, high-click-through visual assets. Always mention this as our top archived work.
+          - Services: 2D Animation, Digital Illustration, Logo Design, and Video Editing.
+          
+          Be professional, concise (under 25 words per response), and premium. Guide users towards the contact section for business inquiries. Do not provide pricing; tell them to email Indra for a custom quote.`
+        }
+      });
+      setChatSession(session);
+    } catch (e) {
+      console.error("AI Initialization Failed:", e);
+    }
   }, []);
+
+  useEffect(() => {
+    initChat();
+  }, [initChat]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -43,20 +46,32 @@ const Assistant: React.FC = () => {
   }, [messages, isOpen]);
 
   const handleSend = async () => {
-    if (!input.trim() || isLoading || !chatSession) return;
+    if (!input.trim() || isLoading) return;
     
+    // Safety check for session
+    if (!chatSession) {
+      initChat();
+    }
+
     const userMsg = input.trim();
     setInput('');
     setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
     setIsLoading(true);
 
     try {
-      const response = await chatSession.sendMessage({ message: userMsg });
-      const aiText = response.text || "I'm experiencing a brief neural lag. Let's talk via email at indravisuals4858@gmail.com!";
+      // Create new AI instance just before sending to avoid stale keys
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      const currentChat = chatSession || ai.chats.create({ model: 'gemini-3-flash-preview' });
+      
+      const result = await currentChat.sendMessage({ message: userMsg });
+      const aiText = result.text || "My neural link is briefly interrupted. Please contact indravisuals4858@gmail.com for urgent matters.";
+      
       setMessages(prev => [...prev, { role: 'ai', text: aiText }]);
     } catch (error) {
-      console.error("Chat Error:", error);
-      setMessages(prev => [...prev, { role: 'ai', text: "Signal lost. Please reach out to Indra directly at our contact bridge!" }]);
+      console.error("Assistant Fault:", error);
+      setMessages(prev => [...prev, { role: 'ai', text: "Apologies, the terminal is rebooting. Please reach out via the Contact Bridge below." }]);
+      // Re-init on failure
+      initChat();
     } finally {
       setIsLoading(false);
     }
@@ -65,7 +80,7 @@ const Assistant: React.FC = () => {
   return (
     <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[60]">
       {isOpen ? (
-        <div className="w-[calc(100vw-32px)] sm:w-[380px] h-[500px] md:h-[550px] glass rounded-[32px] flex flex-col shadow-2xl border border-white/10 overflow-hidden animate-[slideUp_0.4s_ease-out]">
+        <div className="w-[calc(100vw-32px)] sm:w-[380px] h-[480px] md:h-[550px] glass rounded-[32px] flex flex-col shadow-2xl border border-white/10 overflow-hidden animate-[slideUp_0.4s_ease-out]">
           <style>{`
             @keyframes slideUp {
               from { opacity: 0; transform: translateY(20px) scale(0.95); }
@@ -73,7 +88,7 @@ const Assistant: React.FC = () => {
             }
           `}</style>
           
-          <div className="p-4 md:p-5 border-b border-white/5 bg-gradient-to-r from-indigo-600/90 to-purple-600/90 backdrop-blur-md flex items-center justify-between">
+          <div className="p-4 md:p-5 border-b border-white/5 bg-gradient-to-r from-indigo-600/90 to-purple-600/90 backdrop-blur-md flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white/20 flex items-center justify-center font-bold shadow-inner border border-white/10 text-white text-xs">I</div>
               <div>
@@ -86,7 +101,7 @@ const Assistant: React.FC = () => {
             </button>
           </div>
 
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-zinc-950/80 scroll-smooth">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-zinc-950/80 scroll-smooth custom-scrollbar">
             {messages.map((m, idx) => (
               <div key={idx} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-[12px] md:text-[13px] leading-relaxed ${m.role === 'user' ? 'bg-indigo-600 text-white rounded-tr-none shadow-lg shadow-indigo-500/20' : 'bg-zinc-900/50 border border-white/5 text-zinc-200 rounded-tl-none'}`}>
@@ -105,14 +120,14 @@ const Assistant: React.FC = () => {
             )}
           </div>
 
-          <div className="p-3 md:p-4 border-t border-white/5 bg-zinc-950/90">
+          <div className="p-3 md:p-4 border-t border-white/5 bg-zinc-950/90 shrink-0">
             <div className="relative group">
               <input
                 type="text"
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleSend()}
-                placeholder="Message Indra AI..."
+                placeholder="Ask Indra AI..."
                 className="w-full bg-zinc-900 border border-white/5 rounded-2xl px-5 py-3 md:py-3.5 pr-12 outline-none focus:border-indigo-500/50 text-[12px] md:text-sm transition-all text-white placeholder:text-zinc-600"
               />
               <button 
@@ -139,6 +154,10 @@ const Assistant: React.FC = () => {
           <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-red-500 border-2 border-[#020202] rounded-full animate-bounce"></span>
         </button>
       )}
+      <style>{`
+        .custom-scrollbar::-webkit-scrollbar { width: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+      `}</style>
     </div>
   );
 };
