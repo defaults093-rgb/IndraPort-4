@@ -35,8 +35,8 @@
       
       .glass {
         background: rgba(255, 255, 255, 0.02);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
         border: 1px solid rgba(255, 255, 255, 0.05);
       }
       
@@ -48,10 +48,10 @@
       
       .reveal {
         opacity: 0;
-        transform: translateY(20px) scale(0.98);
+        transform: translateY(30px) scale(0.97);
         transition: 
-          opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-          transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+          opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+          transform 1s cubic-bezier(0.16, 1, 0.3, 1);
         will-change: transform, opacity;
       }
       .reveal.active {
@@ -61,8 +61,8 @@
 
       #custom-cursor {
         position: fixed;
-        width: 10px;
-        height: 10px;
+        width: 12px;
+        height: 12px;
         background: white;
         border-radius: 50%;
         pointer-events: none;
@@ -72,13 +72,13 @@
       }
       #custom-cursor-follower {
         position: fixed;
-        width: 36px;
-        height: 36px;
-        border: 1px solid rgba(255,255,255,0.25);
+        width: 44px;
+        height: 44px;
+        border: 1px solid rgba(255,255,255,0.2);
         border-radius: 50%;
         pointer-events: none;
         z-index: 9998;
-        transition: transform 0.15s ease-out;
+        transition: transform 0.1s ease-out;
       }
       
       .cursor-hover #custom-cursor { transform: scale(5); }
@@ -114,8 +114,8 @@
           cursor.style.left = e.clientX + 'px';
           cursor.style.top = e.clientY + 'px';
           setTimeout(() => {
-            follower.style.left = (e.clientX - 18) + 'px';
-            follower.style.top = (e.clientY - 18) + 'px';
+            follower.style.left = (e.clientX - 22) + 'px';
+            follower.style.top = (e.clientY - 22) + 'px';
           }, 40);
         }
       });

@@ -43,7 +43,7 @@ const App: React.FC = () => {
         await saveProject(p);
       }
     } catch (e) {
-      console.error("Initial Artifact Seed Fault:", e);
+      console.error("Initial Seed Fault:", e);
     }
   };
 
@@ -57,18 +57,18 @@ const App: React.FC = () => {
 
         if (!mounted) return;
 
-        // Force a re-sync if the first project is not 'thumbnail-editing' to ensure new order
-        const currentOrderCorrect = storedProjects.length > 0 && storedProjects[0].id === 'thumbnail-editing';
-        const needsSync = storedProjects.length === 0 || !currentOrderCorrect;
+        // Force re-sync to show only the logo work if non-logo IDs exist
+        const hasLegacyProjects = storedProjects.some(p => !['store-logo-v1', 'store-logo-v2', 'store-logo-v3'].includes(p.id));
+        const needsSync = storedProjects.length === 0 || hasLegacyProjects;
 
         if (needsSync) {
-          console.log(`[Visual Engine] Re-syncing manifest for optimal sequence: Thumbnail First...`);
+          console.log(`[Visual Engine] Syncing exclusively Store Logo archives...`);
           await seedDatabase(INITIAL_PROJECTS);
           await refreshProjects();
         }
       } catch (err) {
-        console.error("Hardware Failure:", err);
-        if (mounted) setErrorState("Critical Engine Error: Persistent storage link is unavailable.");
+        console.error("Storage Failure:", err);
+        if (mounted) setErrorState("Critical Engine Error: Persistent storage link unavailable.");
       } finally {
         if (mounted) setIsLoading(false);
       }
@@ -172,7 +172,7 @@ const App: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#020202] flex flex-col items-center justify-center gap-6">
+      <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center gap-6">
         <div className="relative">
           <div className="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full flex items-center justify-center font-bold text-white text-2xl animate-pulse shadow-[0_0_40px_rgba(99,102,241,0.3)]">I</div>
           <div className="absolute inset-0 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin"></div>
@@ -199,7 +199,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#020202]">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#050505]">
       <div className="fixed top-0 left-0 w-full h-1 z-[110] bg-zinc-900/50">
         <div 
           className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500 transition-all duration-300 shadow-[0_0_20px_rgba(99,102,241,0.6)]" 
@@ -211,11 +211,11 @@ const App: React.FC = () => {
       
       <main className="relative z-10">
         <section id="home"><Hero /></section>
-        <section id="work" className="py-16 md:py-24">
+        <section id="work" className="py-20 md:py-32">
           <ProjectGallery projects={projects} />
         </section>
-        <section id="services" className="py-16 md:py-24"><ServiceSection /></section>
-        <section id="contact" className="py-16 md:py-24"><ContactSection /></section>
+        <section id="services" className="py-20 md:py-32"><ServiceSection /></section>
+        <section id="contact" className="py-20 md:py-32"><ContactSection /></section>
       </main>
 
       <Footer />
@@ -223,10 +223,10 @@ const App: React.FC = () => {
 
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className={`fixed bottom-6 right-6 md:bottom-8 md:right-8 w-12 h-12 glass rounded-full flex items-center justify-center transition-all duration-500 hover:bg-indigo-600/20 group z-50 ${showScrollTop ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-90 pointer-events-none'}`}
+        className={`fixed bottom-8 right-8 md:bottom-10 md:right-10 w-14 h-14 glass rounded-full flex items-center justify-center transition-all duration-500 hover:bg-indigo-600/20 group z-50 ${showScrollTop ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-90 pointer-events-none'}`}
         aria-label="Back to Top"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-400 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-400 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
         </svg>
       </button>

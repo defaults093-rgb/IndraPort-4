@@ -2,46 +2,25 @@ import { Project, Service } from '../types';
 
 export const PROJECTS: Project[] = [
   {
-    id: 'thumbnail-editing',
-    title: 'THUMBNAIL',
-    category: 'Editing',
-    imageUrl: 'https://images.unsplash.com/photo-1770137098448-5b16ef7f2346?w=2000&auto=format&fit=crop',
-    description: 'Professional high-retention thumbnail design with advanced color grading and attention-grabbing visual elements.'
-  },
-  {
-    id: 'fenix-illustration',
-    title: 'FENIX ILLUSTRATION 🦊',
-    category: 'Illustration',
-    imageUrl: 'https://images.unsplash.com/photo-1770137098751-f8a66174c1a4?w=2000&auto=format&fit=crop',
-    description: 'A premium digital illustration piece that combines intricate detail with cinematic lighting and composition.'
-  },
-  {
-    id: 'cat-illustration',
-    title: 'CAT ILLUSTRATION 😻',
-    category: 'Illustration',
-    imageUrl: 'https://images.unsplash.com/photo-1770137013352-aa5db6f6bcbd?w=2000&auto=format&fit=crop',
-    description: 'A vibrant and expressive digital illustration featuring a stylized cat character with cinematic lighting.'
-  },
-  {
     id: 'store-logo-v3',
-    title: 'STORE LOGO',
+    title: 'STORE LOGO PRESET',
     category: 'Logo Design',
     imageUrl: 'https://images.unsplash.com/photo-1770137013294-4d2869814f6e?q=80&w=2000&auto=format&fit=crop',
     description: 'A clean and modern store logo identity emphasizing minimalist aesthetics and professional brand presence.'
   },
   {
     id: 'store-logo-v2',
-    title: 'STORE LOGO',
+    title: 'BRAND IDENTITY V2',
     category: 'Logo Design',
     imageUrl: 'https://images.unsplash.com/photo-1770137013310-0f100329e186?q=80&w=2000&auto=format&fit=crop',
     description: 'A detailed presentation of the store identity, showcasing the professional and clean aesthetic of the brand across secondary applications.'
   },
   {
     id: 'store-logo-v1',
-    title: 'STORE LOGO',
+    title: 'CORE STORE LOGO',
     category: 'Logo Design',
     imageUrl: 'https://images.unsplash.com/photo-1770135939978-12ec7363a3de?q=80&w=2000&auto=format&fit=crop',
-    description: 'This is a logo design created for a store. It represents the store’s identity and is designed to look professional, simple, and memorable.'
+    description: 'The foundation logo design created for a premium store. Simple, memorable, and professional.'
   }
 ];
 
