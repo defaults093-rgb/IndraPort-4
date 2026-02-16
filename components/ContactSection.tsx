@@ -1,11 +1,10 @@
-
 import React from 'react';
 
 const ContactSection: React.FC = () => {
   const socials = [
     { 
       name: 'INSTAGRAM', 
-      url: 'https://www.instagram.com/indra_visuals?igsh=ZzU2ZWxybG1ldDRw',
+      url: 'https://www.instagram.com/indra__visuals?igsh=MXRzeXZmeXh5d3Z3MA==',
       color: 'hover:text-white hover:border-[#E4405F] hover:bg-[#E4405F]/10 hover:shadow-[0_0_30px_rgba(228,64,95,0.3)]'
     },
     { 

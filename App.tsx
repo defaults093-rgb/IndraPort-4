@@ -7,7 +7,6 @@ import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 import AdminPanel from './components/AdminPanel';
 import LoginPage from './components/LoginPage';
-import Assistant from './components/Assistant';
 import { PROJECTS as INITIAL_PROJECTS } from './components/constants';
 import { Project } from './types';
 import { getAllProjects, saveProject, deleteProjectFromDB, initDB } from './db';
@@ -219,7 +218,6 @@ const App: React.FC = () => {
       </main>
 
       <Footer />
-      <Assistant />
 
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}

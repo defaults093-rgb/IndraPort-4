@@ -1,11 +1,10 @@
-
 import React from 'react';
 
 const Footer: React.FC = () => {
   const socials = [
     { 
       name: 'Instagram', 
-      url: 'https://www.instagram.com/indra_visuals?igsh=ZzU2ZWxybG1ldDRw',
+      url: 'https://www.instagram.com/indra__visuals?igsh=MXRzeXZmeXh5d3Z3MA==',
       brandColor: 'hover:border-[#E4405F] hover:shadow-[0_0_20px_rgba(228,64,95,0.4)]',
       glowColor: 'bg-[#E4405F]',
       icon: (
